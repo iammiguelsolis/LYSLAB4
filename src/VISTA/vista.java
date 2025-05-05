@@ -1,7 +1,10 @@
 package VISTA;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import MODELO.AFNtoAFD;
 public class vista extends javax.swing.JFrame {
     static String EstadoInicial;
     static String EstadoFinal;
-    DefaultTableModel ml = new DefaultTableModel();
+    DefaultTableModel ml = new DefaultTableModel(new Object[][]{}, new String[]{"ORIGEN", "SIMBOLO", "DESTINO"});
     List<List<String>> Transiciones = new ArrayList<>();
     List<List<String>> tablaAFD = new ArrayList<>();
     List<List<String>> tablaAFDM = new ArrayList<>();
@@ -36,8 +39,17 @@ public class vista extends javax.swing.JFrame {
     private int estadoprograma;
     public vista() {
         iniciar();
-        ml.setColumnIdentifiers(new Object[]{"ORIGEN", "SIMBOLO", "DESTINO"});
+        //CONFIGURACION TABLE1
+        JTableHeader header = table1.getTableHeader();
+        header.setBackground(Color.decode("#002E40"));
+        header.setForeground(Color.WHITE);
+        header.setFont(new Font("Consolas", Font.BOLD, 14));
+        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
+        renderer.setVerticalAlignment(SwingConstants.CENTER);
         table1.setModel(ml);
+
+
         agregarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,6 +110,15 @@ public class vista extends javax.swing.JFrame {
                 modeloAFD.addRow(fila.toArray());
             }
 
+            JTableHeader header2 = table2.getTableHeader();
+            header2.setBackground(Color.decode("#661C16"));
+            header2.setForeground(Color.WHITE);
+            header2.setFont(new Font("Consolas", Font.BOLD, 14));
+            DefaultTableCellRenderer renderer2 = (DefaultTableCellRenderer) header2.getDefaultRenderer();
+            renderer2.setHorizontalAlignment(SwingConstants.CENTER);
+            renderer2.setVerticalAlignment(SwingConstants.CENTER);
+
+
             table2.setModel(modeloAFD);
 
             System.out.println("Mostrando tabla AFD en table2");
@@ -138,6 +159,10 @@ public class vista extends javax.swing.JFrame {
         Simbolo.setEnabled(false);
         Destino.setEnabled(false);
         setVisible(true);
+        agregarButton.setForeground(Color.WHITE);
+        crearAFButton.setForeground(Color.WHITE);
+        ConvertirAFDButton.setForeground(Color.WHITE);
+        MinimizarAFDButton.setForeground(Color.WHITE);
     }
 
     public String getInicial() {
