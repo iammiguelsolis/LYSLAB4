@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 public class AFNtoAFD {
+    private final String simboloLambda;
     private Map<String, Map<String, Set<String>>> afn = new HashMap<>();
     private Set<String> todosEstados = new HashSet<>();
     private Set<String> estadosFinales = new HashSet<>();
@@ -14,8 +15,9 @@ public class AFNtoAFD {
     private Map<String, Map<String, String>> afdm;
     private Set<String> estadosFinalesAFD = new HashSet<>();
 
-    public AFNtoAFD(String estadoInicial, Set<String> estadosFinales, List<List<String>> transiciones) {
+    public AFNtoAFD(String estadoInicial, Set<String> estadosFinales, List<List<String>> transiciones, String simboloLambda) {
         this.estadoInicial = estadoInicial;
+        this.simboloLambda = simboloLambda;
         this.estadosFinales.addAll(estadosFinales);
         todosEstados.add(estadoInicial);
         todosEstados.addAll(estadosFinales);
@@ -33,8 +35,12 @@ public class AFNtoAFD {
 
         alfabeto = afn.values().stream()
                 .flatMap(map -> map.keySet().stream())
-                .filter(s -> !s.equals("e"))
+                .filter(s -> !s.equals(simboloLambda))
                 .collect(Collectors.toSet());
+    }
+
+    public AFNtoAFD(String estadoInicial, Set<String> estadosFinales, List<List<String>> transiciones) {
+        this(estadoInicial, estadosFinales, transiciones, "λ");
     }
 
     private Set<String> cerraduraLambda(String estado) {
@@ -44,7 +50,7 @@ public class AFNtoAFD {
         q.add(estado);
         while (!q.isEmpty()) {
             String actual = q.poll();
-            Set<String> siguientes = afn.getOrDefault(actual, new HashMap<>()).get("e");
+            Set<String> siguientes = afn.getOrDefault(actual, new HashMap<>()).get(simboloLambda);
             if (siguientes != null) {
                 for (String siguiente : siguientes) {
                     if (!resultado.contains(siguiente)) {
@@ -194,7 +200,6 @@ public class AFNtoAFD {
 
     private List<List<String>> construirTabla(Map<String, Map<String, String>> tabla, Set<String> alfabeto) {
         List<List<String>> resultado = new ArrayList<>();
-        // Encabezado
         List<String> encabezado = new ArrayList<>();
         encabezado.add("Estado");
         encabezado.addAll(alfabeto);

@@ -55,7 +55,7 @@ public class vista extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 switch (estadoprograma){
                     case 0:
-                        if (!inicial.getText().equals("") || !finall.getText().equals("")) {
+                        if (!inicial.getText().equals("") && !finall.getText().equals("")) {
                             EstadoInicial = getInicial();
                             EstadoFinal = getFinal();
                             crearAFButton.setEnabled(true);
@@ -72,14 +72,23 @@ public class vista extends javax.swing.JFrame {
                         }
                         break;
                     case 1:
-                        if(!Origen.getText().equals("") || !Simbolo.getText().equals("")  || !Destino.getText().equals("")){
+                        if (!Origen.getText().isEmpty() && !Destino.getText().isEmpty()) {
                             ArrayList<String> vector = new ArrayList<>();
+                            String aux;
                             vector.add(getOrigen());
-                            vector.add(getSimbolo());
+                            if (Simbolo.getText().isEmpty()) {
+                                vector.add("λ");
+                                aux = "λ";
+                            } else {
+                                vector.add(Simbolo.getText());
+                                aux = Simbolo.getText();
+                            }
                             vector.add(getDestino());
-                            agregarFilaATabla(getOrigen(),getSimbolo(),getDestino());
+                            agregarFilaATabla(getOrigen(), aux, getDestino());
                             Transiciones.add(vector);
                             System.out.println(Transiciones);
+                        }else {
+                            JOptionPane.showMessageDialog(vista.this, "FALTAN DATOS");
                         }
                         break;
                 }
