@@ -95,7 +95,7 @@ public class vista extends javax.swing.JFrame {
             }
         });
         crearAFButton.addActionListener(e -> {
-            Set<String> estadosFinales = new HashSet<>(Arrays.asList(EstadoFinal));
+            Set<String> estadosFinales = new HashSet<>(Arrays.asList(EstadoFinal.split(" ")));
             AFNtoAFD automata = new AFNtoAFD(EstadoInicial, estadosFinales, Transiciones);
             automata.generarAFD();
             tablaAFD = automata.obtenerTablaAFD();
